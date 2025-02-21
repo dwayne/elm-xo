@@ -1,0 +1,11 @@
+{
+  "packages": [
+    "git+ssh://git@github.com/dwayne/elm?rev=a773e8dad1b0be2012712466c9d4725084979a4e"
+  ],
+  "shell": {
+    "init_hook": [
+      "alias f='elm format src/ tests/ --yes'",
+      "alias t='elm test'"
+    ]
+  }
+}
