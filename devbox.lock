@@ -1,0 +1,165 @@
+{
+  "lockfile_version": "1",
+  "packages": {
+    "elmPackages.elm-format@latest": {
+      "last_modified": "2025-02-07T11:26:36Z",
+      "resolved": "github:NixOS/nixpkgs/d98abf5cf5914e5e4e9d57205e3af55ca90ffc1d#elmPackages.elm-format",
+      "source": "devbox-search",
+      "version": "0.8.7",
+      "systems": {
+        "aarch64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/5yz43dvn7pla3ijlwxl0r0ibp47s6laj-elm-format-0.8.7",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/5yz43dvn7pla3ijlwxl0r0ibp47s6laj-elm-format-0.8.7"
+        },
+        "aarch64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/xwfrfm98krdc5x8j8h5dack220gk7rsv-elm-format-0.8.7",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/xwfrfm98krdc5x8j8h5dack220gk7rsv-elm-format-0.8.7"
+        },
+        "x86_64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/d7cgn8czj9z94vhawps61ymp49145vky-elm-format-0.8.7",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/d7cgn8czj9z94vhawps61ymp49145vky-elm-format-0.8.7"
+        },
+        "x86_64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/9hd219clq5zhy2x1z8izris8pcz0z2gw-elm-format-0.8.7",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/9hd219clq5zhy2x1z8izris8pcz0z2gw-elm-format-0.8.7"
+        }
+      }
+    },
+    "elmPackages.elm-test@latest": {
+      "last_modified": "2025-02-16T00:50:12Z",
+      "resolved": "github:NixOS/nixpkgs/1dcdd535fef84d4671129a10e7072d56dca9a4d3#elmPackages.elm-test",
+      "source": "devbox-search",
+      "version": "0.19.1-revision13",
+      "systems": {
+        "aarch64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/sg8nx0gi75jbiy1bhrwv3vassmpcax1f-elm-test-0.19.1-revision13",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/sg8nx0gi75jbiy1bhrwv3vassmpcax1f-elm-test-0.19.1-revision13"
+        },
+        "aarch64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/6z2n16459zkr0ckzdp99cgv7w66b0idn-elm-test-0.19.1-revision13",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/6z2n16459zkr0ckzdp99cgv7w66b0idn-elm-test-0.19.1-revision13"
+        },
+        "x86_64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/aw5yv9ljfaig36r0yc6ryvwa2q3vrdfq-elm-test-0.19.1-revision13",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/aw5yv9ljfaig36r0yc6ryvwa2q3vrdfq-elm-test-0.19.1-revision13"
+        },
+        "x86_64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/56fkcf7g5miqr24add34y2n56qkggb4p-elm-test-0.19.1-revision13",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/56fkcf7g5miqr24add34y2n56qkggb4p-elm-test-0.19.1-revision13"
+        }
+      }
+    },
+    "elmPackages.elm@latest": {
+      "last_modified": "2025-02-07T11:26:36Z",
+      "resolved": "github:NixOS/nixpkgs/d98abf5cf5914e5e4e9d57205e3af55ca90ffc1d#elmPackages.elm",
+      "source": "devbox-search",
+      "version": "0.19.1",
+      "systems": {
+        "aarch64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/hxk83nq4zv8gcw6ncnc7jj9fpfg915x1-elm-0.19.1",
+              "default": true
+            },
+            {
+              "name": "doc",
+              "path": "/nix/store/6lnggy1ik69x2g7k15gpgbihnsa1byz3-elm-0.19.1-doc"
+            }
+          ],
+          "store_path": "/nix/store/hxk83nq4zv8gcw6ncnc7jj9fpfg915x1-elm-0.19.1"
+        },
+        "aarch64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/w6h7fmglg3an7si3bnjzmkdxgyqahnjb-elm-0.19.1",
+              "default": true
+            },
+            {
+              "name": "doc",
+              "path": "/nix/store/sqb1i7003ci72hfpg82k2ahcssk72ry7-elm-0.19.1-doc"
+            }
+          ],
+          "store_path": "/nix/store/w6h7fmglg3an7si3bnjzmkdxgyqahnjb-elm-0.19.1"
+        },
+        "x86_64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/2v4dd12fdljjcz6bzh1fzw44658mgzga-elm-0.19.1",
+              "default": true
+            },
+            {
+              "name": "doc",
+              "path": "/nix/store/mfanzlyihmlrchdhxdg9w22arhyvld0x-elm-0.19.1-doc"
+            }
+          ],
+          "store_path": "/nix/store/2v4dd12fdljjcz6bzh1fzw44658mgzga-elm-0.19.1"
+        },
+        "x86_64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/fdsw43ly1hpi5va1ff7bjzywc8k15hnw-elm-0.19.1",
+              "default": true
+            },
+            {
+              "name": "doc",
+              "path": "/nix/store/n0zc6dskjcr73a092pm5r4spc4jbz3bh-elm-0.19.1-doc"
+            }
+          ],
+          "store_path": "/nix/store/fdsw43ly1hpi5va1ff7bjzywc8k15hnw-elm-0.19.1"
+        }
+      }
+    }
+  }
+}
