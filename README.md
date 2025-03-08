@@ -32,10 +32,22 @@ game4 = XO.play (2,1) game3 |> Result.withDefault game3
 
 XO.toString game4
 -- "o...x..ox"
+--
+-- Which represents the following board:
+--
+--    0   1   2
+-- 0  o |   |
+--   ---+---+---
+-- 1    | x |
+--   ---+---+---
+-- 2    | o | x
+--
 
 -- Where should I play?
-XO.goodPositions game4
--- [(0,2),(1,2)]
+XO.findGoodPositions game4
+-- Ok { optimum = W, possibilities = [((0,2),3),((1,2),3)] }
+--
+-- i.e. X can win in 3 moves if X is played at (0,2) or (1,2)
 
 game5 = XO.play (1,2) game4 |> Result.withDefault game4
 -- Playing { board = [((1,2),X),((2,1),O),((2,2),X),((0,0),O),((1,1),X)], first = X, turn = O }
@@ -52,7 +64,7 @@ XO.toState game7
 -- { first = X, outcome = Win X [((1,0),(1,1),(1,2))], turn = X }
 ```
 
-## The public API at a glance
+## Public API
 
 A high-level overview of the types and functions that make up the library.
 
@@ -67,9 +79,11 @@ Rules, defaultRules, playAgain
 
 State, Outcome, Line, toState
 
+openPositions
+
 Tile, map
 
 toString
 
-openPositions, goodPositions
+Report, Optimum, AnalysisError, findGoodPositions
 ```

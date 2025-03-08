@@ -4,9 +4,10 @@ module XO exposing
     , Position, PlayError(..), play
     , Rules, defaultRules, playAgain
     , State, Outcome(..), Line, toState
+    , openPositions
     , Tile, map
     , toString
-    , openPositions, goodPositions
+    , Report, Optimum(..), AnalysisError(..), findGoodPositions
     )
 
 {-| `XO` is a reference to **Xs and Os** which is an alternative name for [Tic-tac-toe](https://en.wikipedia.org/wiki/Tic-tac-toe).
@@ -31,6 +32,7 @@ module XO exposing
 # State
 
 @docs State, Outcome, Line, toState
+@docs openPositions
 
 
 # Transform
@@ -39,13 +41,13 @@ module XO exposing
 @docs toString
 
 
-# AI
+# Analyze
 
-@docs openPositions, goodPositions
+@docs Report, Optimum, AnalysisError, findGoodPositions
 
 -}
 
-import XO.AI as AI
+import XO.Analyzer as Analyzer
 import XO.Board as Board exposing (Board)
 import XO.Mark as Mark exposing (Mark)
 import XO.Referee as Referee exposing (Location(..))
@@ -317,6 +319,18 @@ toLine location =
             ( ( 0, 2 ), ( 1, 1 ), ( 2, 0 ) )
 
 
+{-| Get the unoccupied positions on the board of a game.
+-}
+openPositions : Game -> List Position
+openPositions game =
+    case game of
+        Playing { board } ->
+            Board.openPositions board
+
+        GameOver _ ->
+            []
+
+
 
 -- TRANSFORM
 
@@ -394,31 +408,172 @@ tileToChar tile =
 
 
 
--- AI
+-- Analyze
 
 
-{-| Get the unoccupied positions on the board of a game.
--}
-openPositions : Game -> List Position
-openPositions game =
-    case game of
-        Playing { board } ->
-            Board.openPositions board
+{-| The report tells you the best outcome that can be achieved, assuming both players play perfectly.
 
-        GameOver _ ->
-            []
-
-
-{-| Get the good unoccupied positions on the board of a game for the current player.
-
-**N.B.** _If a configuration of the board for a game is ultimately losing for the current player, assuming the other player plays perfectly, then it really doesn't matter where they play. In that case, all the open positions are returned. For e.g. suppose they were playing and they ended up with this configuration of the board, `xo..x....`, then there is no position `O` can play to avoid losing, assuming `X` plays perfectly. In particular, blocking `X` at `(2, 2)` is not a good move since it only delays the inevitable. On the other hand, it can be argued that blocking `X` at `(2, 2)` is a good move assuming their opponent can make mistakes because it gives them a slight chance of not losing. This function assumes an opponent plays perfectly._
+`possibilities` is a list of pairs of position and number of moves. Each pair represents the
+position to play, to achieve the best outcome, and the number of moves it takes to achieve it.
 
 -}
-goodPositions : Game -> List Position
-goodPositions game =
-    case game of
-        Playing { turn, board } ->
-            AI.findGoodPositions turn board
+type alias Report =
+    { optimum : Optimum
+    , possibilities : List ( Position, Int )
+    }
 
-        GameOver _ ->
-            []
+
+{-| The best outcome that can be achieved.
+
+  - `W` means you can win
+  - `D` means you can draw at best
+  - `L` means no matter what position is played you will lose
+
+-}
+type Optimum
+    = W
+    | D
+    | L
+
+
+{-| Not all games can be analyzed. For e.g. if all positions are occupied or
+the game is over then there's nothing to analyze.
+-}
+type AnalysisError
+    = NoOpenPositions
+    | NoGameInProgress
+
+
+{-| Find the good unoccupied positions on the board of a game for the current player.
+
+
+## Example 1
+
+Suppose `O` has the next turn in a game, `g1`, with a board layout of `x.o.x....`, then
+
+    --
+    --    0   1   2
+    -- 0  x |   | o
+    --   ---+---+---
+    -- 1    | x |
+    --   ---+---+---
+    -- 2    |   |
+    --
+    findGoodPositions g1
+        == { optimum = D
+           , possibilities = [ ( ( 2, 2 ), 6 ) ]
+           }
+
+It means that `O` can draw at best, in 6 moves, if `O` is played at `(2, 2)`.
+
+
+## Example 2
+
+Suppose `O` has the next turn in a game, `g2`, with a board layout of `xo..x....`, then
+
+    --
+    --    0   1   2
+    -- 0  x | o |
+    --   ---+---+---
+    -- 1    | x |
+    --   ---+---+---
+    -- 2    |   |
+    --
+    findGoodPositions g2
+        == { optimum = L
+           , possibilities =
+                [ ( ( 0, 2 ), 2 )
+                , ( ( 1, 0 ), 2 )
+                , ( ( 1, 2 ), 2 )
+                , ( ( 2, 0 ), 2 )
+                , ( ( 2, 1 ), 2 )
+                , ( ( 2, 2 ), 4 )
+                ]
+           }
+
+It means that no matter the position `O` plays, `O` will lose. However, if
+`O` is played at `(2, 2)`, in order to block `X` from the immediate win, then
+`O` can extend the game a little more.
+
+
+## Example 3
+
+Suppose `X` has the next turn in a game, `g3`, with a board layout of `x.ox...o.`, then
+
+    --
+    --    0   1   2
+    -- 0  x |   | o
+    --   ---+---+---
+    -- 1  x |   |
+    --   ---+---+---
+    -- 2    | o |
+    --
+    findGoodPositions g3
+        == { optimum = W
+           , possibilities =
+                [ ( ( 1, 1 ), 3 )
+                , ( ( 1, 2 ), 3 )
+                , ( ( 2, 0 ), 1 )
+                , ( ( 2, 2 ), 3 )
+                ]
+           }
+
+It means that `X` can win. `X` can either win immediately if `X` is played at `(2, 0)`, or
+`X` can have some fun and win in 3 moves if `X` is played at `(1, 1)`, `(1, 2)`, or `(2, 2)`.
+
+
+## Example 4
+
+Suppose `X` has the next turn in a game, `g4`, with a board layout of `x.o...x.o`, then
+
+    --
+    --    0   1   2
+    -- 0  x |   | o
+    --   ---+---+---
+    -- 1    |   |
+    --   ---+---+---
+    -- 2  x |   | o
+    --
+    findGoodPositions g4
+        == { optimum = W
+           , possibilities = [ ( ( 1, 0 ), 1 ) ]
+           }
+
+It means that `X` can win immediately if `X` is played at `(1, 0)`. Notice that
+winning is favoured over blocking `O` at `(1, 2)`.
+
+**N.B.** _All the analysis above assumes perfect play by both players._
+
+-}
+findGoodPositions : Game -> Result AnalysisError Report
+findGoodPositions game =
+    let
+        state =
+            case game of
+                Playing { turn, board } ->
+                    { turn = turn, board = board }
+
+                GameOver { turn, board } ->
+                    { turn = turn, board = board }
+    in
+    case Analyzer.findGoodPositions state.turn state.board of
+        Ok { optimum, possibilities } ->
+            Ok
+                { optimum =
+                    case optimum of
+                        Analyzer.W ->
+                            W
+
+                        Analyzer.D ->
+                            D
+
+                        Analyzer.L ->
+                            L
+                , possibilities = possibilities
+                }
+
+        Err Analyzer.NoOpenPositions ->
+            Err NoOpenPositions
+
+        Err Analyzer.NoGameInProgress ->
+            Err NoGameInProgress

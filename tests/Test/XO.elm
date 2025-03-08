@@ -10,7 +10,8 @@ suite =
     describe "XO"
         [ playSuite
         , playAgainSuite
-        , aiSuite
+        , openPositionsSuite
+        , findGoodPositionsSuite
         ]
 
 
@@ -258,10 +259,10 @@ testPlayAgain { rules, game, first } =
                     }
 
 
-aiSuite : Test
-aiSuite =
-    describe "AI"
-        [ test "openPositions" <|
+openPositionsSuite : Test
+openPositionsSuite =
+    describe "openPositions"
+        [ test "example 1" <|
             \_ ->
                 X
                     |> playMany
@@ -278,7 +279,13 @@ aiSuite =
                         [ ( 1, 0 )
                         , ( 2, 0 )
                         ]
-        , test "goodPositions" <|
+        ]
+
+
+findGoodPositionsSuite : Test
+findGoodPositionsSuite =
+    describe "findGoodPositions"
+        [ test "it finds the blocking move to avoid losing" <|
             \_ ->
                 X
                     |> playMany
@@ -286,10 +293,13 @@ aiSuite =
                         , ( 0, 2 )
                         , ( 1, 1 )
                         ]
-                    |> XO.goodPositions
+                    |> XO.findGoodPositions
                     |> Expect.equal
-                        [ ( 2, 2 )
-                        ]
+                        (Ok
+                            { optimum = XO.D
+                            , possibilities = [ ( ( 2, 2 ), 6 ) ]
+                            }
+                        )
         ]
 
 
